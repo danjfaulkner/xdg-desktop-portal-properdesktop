@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <wayland-client-protocol.h>
 
-using namespace cutefish;
+using namespace properdesktop;
 
 struct ScreenCastStream::Buffer {
     ~Buffer()
@@ -344,10 +344,10 @@ bool ScreenCastStream::connectStream()
 {
     openGbm();
     auto *properties = pw_properties_new(PW_KEY_MEDIA_CLASS, "Video/Source", PW_KEY_MEDIA_ROLE,
-                                         "Screen", PW_KEY_NODE_NAME, "cutefish-screencast",
+                                         "Screen", PW_KEY_NODE_NAME, "properdesktop-screencast",
                                          PW_KEY_NODE_DESCRIPTION, m_target.name.c_str(),
                                          nullptr);
-    m_stream = pw_stream_new(m_pipewire->core(), "cutefish-screencast", properties);
+    m_stream = pw_stream_new(m_pipewire->core(), "properdesktop-screencast", properties);
     if (!m_stream)
         return false;
     m_listener = new spa_hook {};
@@ -589,7 +589,7 @@ void ScreenCastStream::addBuffer(pw_buffer *buffer)
             return;
         }
     } else if (!m_dmabuf && (data[0].type & (1 << SPA_DATA_MemFd))) {
-        entry->fd = memfd_create("cutefish-screencast", MFD_CLOEXEC | MFD_ALLOW_SEALING);
+        entry->fd = memfd_create("properdesktop-screencast", MFD_CLOEXEC | MFD_ALLOW_SEALING);
         if (entry->fd < 0 || ftruncate(entry->fd, size) != 0) {
             finish();
             return;

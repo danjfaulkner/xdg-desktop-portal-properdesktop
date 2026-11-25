@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.18)
-project(xdg-desktop-portal-cutefish VERSION 1.0 LANGUAGES C CXX)
+project(xdg-desktop-portal-properdesktop VERSION 1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(GNUInstallDirs)
-find_package(CutefishToolkit REQUIRED)
+find_package(ProperDesktopToolkit REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(Systemd REQUIRED IMPORTED_TARGET libsystemd)
 pkg_check_modules(PipeWire REQUIRED IMPORTED_TARGET libpipewire-0.3)
@@ -62,28 +62,28 @@ portal_wayland_protocol(portal-core xdg-output-unstable-v1 unstable/xdg-output)
 portal_wayland_protocol(portal-core linux-dmabuf-v1 stable/linux-dmabuf)
 target_include_directories(portal-core PRIVATE ${PROTOCOL_DIR})
 target_include_directories(portal-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(portal-core PUBLIC Cutefish::ToolkitBase PkgConfig::Systemd
+target_link_libraries(portal-core PUBLIC ProperDesktop::ToolkitBase PkgConfig::Systemd
     PRIVATE PkgConfig::PipeWire PkgConfig::WaylandClient PkgConfig::Gbm PkgConfig::Libdrm)
 
-add_executable(xdg-desktop-portal-cutefish src/main.cpp)
-target_link_libraries(xdg-desktop-portal-cutefish PRIVATE portal-core)
-target_compile_definitions(xdg-desktop-portal-cutefish PRIVATE
+add_executable(xdg-desktop-portal-properdesktop src/main.cpp)
+target_link_libraries(xdg-desktop-portal-properdesktop PRIVATE portal-core)
+target_compile_definitions(xdg-desktop-portal-properdesktop PRIVATE
     PROJECT_VERSION="${PROJECT_VERSION}"
 )
 
-configure_file(data/org.freedesktop.impl.portal.desktop.cutefish.service.in
-    org.freedesktop.impl.portal.desktop.cutefish.service @ONLY)
-configure_file(data/xdg-desktop-portal-cutefish.service.in
-    xdg-desktop-portal-cutefish.service @ONLY)
+configure_file(data/org.freedesktop.impl.portal.desktop.properdesktop.service.in
+    org.freedesktop.impl.portal.desktop.properdesktop.service @ONLY)
+configure_file(data/xdg-desktop-portal-properdesktop.service.in
+    xdg-desktop-portal-properdesktop.service @ONLY)
 
-install(TARGETS xdg-desktop-portal-cutefish RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
-install(FILES data/cutefish.portal DESTINATION ${CMAKE_INSTALL_DATADIR}/xdg-desktop-portal/portals)
-install(FILES data/cutefish-portals.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/xdg-desktop-portal)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.impl.portal.desktop.cutefish.service
+install(TARGETS xdg-desktop-portal-properdesktop RUNTIME DESTINATION ${CMAKE_INSTALL_LIBEXECDIR})
+install(FILES data/properdesktop.portal DESTINATION ${CMAKE_INSTALL_DATADIR}/xdg-desktop-portal/portals)
+install(FILES data/properdesktop-portals.conf DESTINATION ${CMAKE_INSTALL_DATADIR}/xdg-desktop-portal)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.freedesktop.impl.portal.desktop.properdesktop.service
     DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services)
 set(SYSTEMD_USER_UNIT_DIR "lib/systemd/user" CACHE STRING
     "Installation directory for systemd user units")
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/xdg-desktop-portal-cutefish.service
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/xdg-desktop-portal-properdesktop.service
     DESTINATION ${SYSTEMD_USER_UNIT_DIR})
 
 include(CTest)

@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-using namespace cutefish;
+using namespace properdesktop;
 
 static int g_signalFds[2] = {-1, -1};
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     quitOnSignal(loop);
 
     base::CommandLineParser parser;
-    parser.setApplicationDescription("Cutefish desktop portal backend");
+    parser.setApplicationDescription("Proper Desktop portal backend");
     parser.setApplicationVersion(PROJECT_VERSION);
     parser.addHelpOption();
     parser.addVersionOption();
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     const base::dbus::Match quitOnDisconnect =
             bus->subscribe(disconnected, [&loop](const base::dbus::Message &) { loop.quit(); });
 
-    SettingsPortal settings(bus, base::paths::cutefishConfig("services"));
+    SettingsPortal settings(bus, base::paths::properdesktopConfig("services"));
     InhibitPortal inhibit(bus);
     FileChooserPortal fileChooser(bus);
     ScreenCastPortal screenCast(bus);
@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (!bus->requestName("org.freedesktop.impl.portal.desktop.cutefish")) {
-        CF_CRITICAL(base::LogCategory::defaultCategory()) << "Cannot own the Cutefish portal service";
+    if (!bus->requestName("org.freedesktop.impl.portal.desktop.properdesktop")) {
+        CF_CRITICAL(base::LogCategory::defaultCategory()) << "Cannot own the Proper Desktop portal service";
         return 1;
     }
 

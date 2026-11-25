@@ -7,7 +7,7 @@
 #include <pipewire/pipewire.h>
 #include <sys/epoll.h>
 
-using namespace cutefish;
+using namespace properdesktop;
 
 static const pw_core_events coreEvents = [] {
     pw_core_events events {};

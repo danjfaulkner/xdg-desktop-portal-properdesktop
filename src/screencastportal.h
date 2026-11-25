@@ -16,14 +16,14 @@ struct CaptureOutput;
 struct CaptureToplevel;
 
 // The permission dialog consumes arrays of dictionaries (aa{sv}), not av.
-cutefish::base::dbus::VariantMap screenCastSourceOptions(
+properdesktop::base::dbus::VariantMap screenCastSourceOptions(
         uint32_t types, const std::vector<CaptureOutput> &outputs,
         const std::vector<CaptureToplevel> &toplevels);
 
 class ScreenCastPortal
 {
 public:
-    explicit ScreenCastPortal(cutefish::base::dbus::Connection *bus);
+    explicit ScreenCastPortal(properdesktop::base::dbus::Connection *bus);
     ~ScreenCastPortal();
 
     bool publish();
@@ -38,15 +38,15 @@ private:
     friend class ScreenCastSession;
     friend class StartRequest;
 
-    void createSession(cutefish::base::dbus::MethodCall &call);
-    void selectSources(cutefish::base::dbus::MethodCall &call);
-    void start(cutefish::base::dbus::MethodCall &call);
+    void createSession(properdesktop::base::dbus::MethodCall &call);
+    void selectSources(properdesktop::base::dbus::MethodCall &call);
+    void start(properdesktop::base::dbus::MethodCall &call);
     ScreenCastSession *session(const std::string &path, const std::string &sender) const;
     // Destroys the session on the next loop turn.
     void deleteLater(ScreenCastSession *session);
 
-    cutefish::base::dbus::Connection *m_bus;
-    cutefish::base::dbus::Object m_object;
+    properdesktop::base::dbus::Connection *m_bus;
+    properdesktop::base::dbus::Object m_object;
     std::unique_ptr<WaylandCapture> m_wayland;
     std::unique_ptr<PipeWireCore> m_pipewire;
     // After the connections they use, so they go first.

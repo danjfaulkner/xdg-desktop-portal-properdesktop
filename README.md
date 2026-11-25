@@ -1,12 +1,12 @@
-# xdg-desktop-portal-cutefish
+# xdg-desktop-portal-properdesktop
 
-The `xdg-desktop-portal` backend for Cutefish: Settings, FileChooser, Inhibit
+The `xdg-desktop-portal` backend for Proper Desktop: Settings, FileChooser, Inhibit
 and ScreenCast.
 
 ## Dependencies
 
 It is built on the base library of
-[cutefish-toolkit](https://github.com/cutefishos/cutefish-toolkit); install it
+[properdesktop-toolkit](https://github.com/danjfaulkner/properdesktop-toolkit); install it
 first.
 
 ```sh
@@ -15,7 +15,7 @@ sudo apt install cmake ninja-build pkg-config libsystemd-dev libpipewire-0.3-dev
 ```
 
 At runtime it needs `xdg-desktop-portal`, `xdg-desktop-portal-gtk`, PipeWire,
-cutefish-services and the File Manager daemon (file dialogs). Tests also need
+properdesktop-services and the File Manager daemon (file dialogs). Tests also need
 `dbus-run-session` and GoogleTest (`libgtest-dev`).
 
 ## Build

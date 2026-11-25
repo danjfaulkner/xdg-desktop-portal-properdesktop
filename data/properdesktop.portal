@@ -1,4 +1,4 @@
 [portal]
-DBusName=org.freedesktop.impl.portal.desktop.cutefish
+DBusName=org.freedesktop.impl.portal.desktop.properdesktop
 Interfaces=org.freedesktop.impl.portal.Settings;org.freedesktop.impl.portal.FileChooser;org.freedesktop.impl.portal.Inhibit;org.freedesktop.impl.portal.ScreenCast;
-UseIn=Cutefish;
+UseIn=ProperDesktop;

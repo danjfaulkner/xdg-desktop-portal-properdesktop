@@ -15,13 +15,13 @@
 // not a request handle or is taken. `close` may reply itself; otherwise Close
 // gets an empty reply after it. Destroying the object, from `close` too,
 // unexports it.
-std::unique_ptr<cutefish::base::dbus::Object>
-exportRequest(cutefish::base::dbus::Connection *bus, const std::string &path,
-              std::function<void(cutefish::base::dbus::MethodCall &)> close);
+std::unique_ptr<properdesktop::base::dbus::Object>
+exportRequest(properdesktop::base::dbus::Connection *bus, const std::string &path,
+              std::function<void(properdesktop::base::dbus::MethodCall &)> close);
 
 // Runs `gone` when the service has no owner, at once when it has none already.
 // It can run more than once, so it must ignore a repeat.
-cutefish::base::dbus::NameWatch watchRequester(cutefish::base::dbus::Connection *bus, const std::string &service,
+properdesktop::base::dbus::NameWatch watchRequester(properdesktop::base::dbus::Connection *bus, const std::string &service,
                                                std::function<void()> gone);
 
 // Runs `task` on the next loop turn while `alive` is still set.

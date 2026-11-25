@@ -16,7 +16,7 @@
 #include <cmath>
 #include <vector>
 
-using namespace cutefish;
+using namespace properdesktop;
 using base::dbus::MethodCall;
 using base::dbus::ObjectPath;
 using base::dbus::Variant;
@@ -34,7 +34,7 @@ static const std::string sessionInterface = "org.freedesktop.impl.portal.Session
 static std::vector<std::string> restoredMonitors(const Variant &value)
 {
     const std::optional<RestoreData> data = value.get<RestoreData>();
-    if (!data || std::get<0>(*data) != "Cutefish" || std::get<1>(*data) != 1)
+    if (!data || std::get<0>(*data) != "ProperDesktop" || std::get<1>(*data) != 1)
         return {};
     const VariantMap map = std::get<2>(*data).value<VariantMap>();
     const auto monitors = map.find("monitors");
@@ -43,7 +43,7 @@ static std::vector<std::string> restoredMonitors(const Variant &value)
 
 static Variant restoreData(const std::vector<std::string> &monitors)
 {
-    return Variant(RestoreData{"Cutefish", 1, Variant(VariantMap{{"monitors", Variant(monitors)}})});
+    return Variant(RestoreData{"ProperDesktop", 1, Variant(VariantMap{{"monitors", Variant(monitors)}})});
 }
 
 static int framerateFor(const CaptureOutput &output)
@@ -61,8 +61,8 @@ static const CaptureOutput *findOutput(const std::vector<CaptureOutput> &outputs
 
 static base::dbus::Message permissionsCall(base::dbus::Connection *bus, const std::string &method)
 {
-    return bus->newMethodCall("org.cutefish.Services", "/org/cutefish/Services/Permissions",
-                              "org.cutefish.Services.Permissions", method);
+    return bus->newMethodCall("org.properdesktop.Services", "/org/properdesktop/Services/Permissions",
+                              "org.properdesktop.Services.Permissions", method);
 }
 
 VariantMap screenCastSourceOptions(uint32_t types, const std::vector<CaptureOutput> &outputs,

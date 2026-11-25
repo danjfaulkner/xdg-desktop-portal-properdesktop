@@ -4,7 +4,7 @@
 
 #include "base/strings.h"
 
-using namespace cutefish;
+using namespace properdesktop;
 using base::dbus::MethodCall;
 using base::dbus::Reply;
 

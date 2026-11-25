@@ -28,15 +28,15 @@ struct ext_foreign_toplevel_handle_v1;
 struct zwp_linux_dmabuf_v1;
 struct zwp_linux_buffer_params_v1;
 
-namespace cutefish::base {
+namespace properdesktop::base {
 class EventLoop;
 }
 
 struct CaptureOutput {
     std::string name;
     std::string description;
-    cutefish::base::Point logicalPosition;
-    cutefish::base::Size logicalSize;
+    properdesktop::base::Point logicalPosition;
+    properdesktop::base::Size logicalSize;
     int refreshMilliHz = 0;
 };
 
@@ -83,17 +83,17 @@ public:
 
     std::unique_ptr<CaptureSession> createSession(const std::string &output, bool cursor);
     std::unique_ptr<CaptureSession> createToplevelSession(const std::string &identifier, bool cursor);
-    wl_buffer *createShmBuffer(int fd, const cutefish::base::Size &size, int stride);
+    wl_buffer *createShmBuffer(int fd, const properdesktop::base::Size &size, int stride);
     // A buffer over planes the caller allocated, delivered to `done` once the
     // compositor has imported it, or as null when it refused. False without
     // linux-dmabuf. A refusal is an event, not a protocol error, which is why
     // this is asynchronous.
-    bool createDmaBufBuffer(const cutefish::base::Size &size, uint32_t format, uint64_t modifier,
+    bool createDmaBufBuffer(const properdesktop::base::Size &size, uint32_t format, uint64_t modifier,
                             const std::vector<DmaBufPlane> &planes,
                             std::function<void(wl_buffer *)> done);
     void flush();
 
-    cutefish::base::Signal<> disconnected;
+    properdesktop::base::Signal<> disconnected;
 
 private:
     friend class CaptureSession;
@@ -119,7 +119,7 @@ private:
     ext_foreign_toplevel_list_v1 *m_toplevelList = nullptr;
     ext_image_copy_capture_manager_v1 *m_copies = nullptr;
     zwp_linux_dmabuf_v1 *m_dmabuf = nullptr;
-    cutefish::base::EventLoop *m_eventLoop;
+    properdesktop::base::EventLoop *m_eventLoop;
     int m_watch = 0;
     std::vector<std::unique_ptr<Output>> m_outputs;
     std::vector<std::unique_ptr<Toplevel>> m_toplevels;
@@ -142,7 +142,7 @@ public:
     CaptureSession(const CaptureSession &) = delete;
     CaptureSession &operator=(const CaptureSession &) = delete;
 
-    cutefish::base::Size bufferSize() const { return m_size; }
+    properdesktop::base::Size bufferSize() const { return m_size; }
     bool argbSupported() const { return m_argb; }
     // DRM fourcc to modifiers the compositor renders into, with the device
     // (st_rdev of a DRM node) to allocate on; empty when SHM is all there is.
@@ -152,14 +152,14 @@ public:
 
     // `damage` is what changed in the buffer since it was last filled; empty
     // means all of it.
-    bool capture(wl_buffer *buffer, const std::vector<cutefish::base::Rect> &damage = {});
+    bool capture(wl_buffer *buffer, const std::vector<properdesktop::base::Rect> &damage = {});
     void cancel();
 
     // Each may destroy the session.
     std::function<void()> onConstraintsChanged;
     std::function<void()> onStopped;
     // `damage` is in buffer coordinates, relative to this session's previous frame.
-    std::function<void(uint64_t presentationNs, uint32_t transform, const std::vector<cutefish::base::Rect> &damage)>
+    std::function<void(uint64_t presentationNs, uint32_t transform, const std::vector<properdesktop::base::Rect> &damage)>
             onFrameReady;
     std::function<void(uint32_t reason)> onFrameFailed;
 
@@ -169,11 +169,11 @@ private:
     CaptureSession(WaylandCapture *wayland, ext_image_copy_capture_session_v1 *session);
 
     WaylandCapture *m_wayland;
-    cutefish::base::Subscription m_disconnected;
+    properdesktop::base::Subscription m_disconnected;
     ext_image_copy_capture_session_v1 *m_session;
     ext_image_copy_capture_frame_v1 *m_frame = nullptr;
-    cutefish::base::Size m_pendingSize;
-    cutefish::base::Size m_size;
+    properdesktop::base::Size m_pendingSize;
+    properdesktop::base::Size m_size;
     bool m_pendingArgb = false;
     bool m_argb = false;
     DmaBufFormats m_pendingDmabufFormats;
@@ -183,5 +183,5 @@ private:
     bool m_stopped = false;
     uint32_t m_transform = 0;
     uint64_t m_presentationNs = 0;
-    std::vector<cutefish::base::Rect> m_damage;
+    std::vector<properdesktop::base::Rect> m_damage;
 };

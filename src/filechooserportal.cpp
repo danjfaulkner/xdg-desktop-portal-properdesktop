@@ -15,14 +15,14 @@
 #include <tuple>
 #include <vector>
 
-using namespace cutefish;
+using namespace properdesktop;
 using base::dbus::MethodCall;
 using base::dbus::Variant;
 using base::dbus::VariantMap;
 using base::json::Value;
 
-static const std::string chooserService = "org.cutefish.FileChooser";
-static const std::string chooserPath = "/org/cutefish/FileChooser";
+static const std::string chooserService = "org.properdesktop.FileChooser";
+static const std::string chooserPath = "/org/properdesktop/FileChooser";
 
 static Value filterJson(const FileFilter &filter)
 {

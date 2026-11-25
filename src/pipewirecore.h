@@ -9,7 +9,7 @@ struct pw_core;
 struct pw_loop;
 struct spa_hook;
 
-namespace cutefish::base {
+namespace properdesktop::base {
 class EventLoop;
 }
 
@@ -35,13 +35,13 @@ public:
     // From inside a PipeWire callback, where the core cannot go yet.
     void failLater();
 
-    cutefish::base::Signal<> disconnected;
+    properdesktop::base::Signal<> disconnected;
 
 private:
     void iterate();
     void disconnect();
 
-    cutefish::base::EventLoop *m_eventLoop;
+    properdesktop::base::EventLoop *m_eventLoop;
     pw_loop *m_loop = nullptr;
     pw_context *m_context = nullptr;
     pw_core *m_core = nullptr;

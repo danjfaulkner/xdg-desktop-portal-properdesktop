@@ -8,7 +8,7 @@
 #include <cmath>
 #include <optional>
 
-using namespace cutefish;
+using namespace properdesktop;
 using base::dbus::Variant;
 using base::dbus::VariantMap;
 

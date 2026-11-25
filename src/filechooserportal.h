@@ -12,7 +12,7 @@ class FileChooserRequest;
 class FileChooserPortal
 {
 public:
-    explicit FileChooserPortal(cutefish::base::dbus::Connection *bus);
+    explicit FileChooserPortal(properdesktop::base::dbus::Connection *bus);
     ~FileChooserPortal();
 
     bool publish();
@@ -22,12 +22,12 @@ public:
 private:
     friend class FileChooserRequest;
 
-    void choose(const std::string &mode, cutefish::base::dbus::MethodCall &call);
+    void choose(const std::string &mode, properdesktop::base::dbus::MethodCall &call);
     // Destroys the request on the next loop turn.
     void deleteLater(FileChooserRequest *request);
 
-    cutefish::base::dbus::Connection *m_bus;
-    cutefish::base::dbus::Object m_object;
+    properdesktop::base::dbus::Connection *m_bus;
+    properdesktop::base::dbus::Object m_object;
     std::map<FileChooserRequest *, std::unique_ptr<FileChooserRequest>> m_requests;
     std::shared_ptr<bool> m_alive = std::make_shared<bool>(true);
 };

@@ -49,7 +49,7 @@ public:
 
     bool start();
     uint32_t nodeId() const { return m_nodeId; }
-    cutefish::base::Size size() const { return m_size; }
+    properdesktop::base::Size size() const { return m_size; }
     const CaptureTarget &target() const { return m_target; }
 
     // Exactly one of onReady and onFailed runs before the node id is known.
@@ -76,7 +76,7 @@ private:
     void removeBuffer(pw_buffer *buffer);
     void captureNext();
     void beginCapture();
-    void frameReady(uint64_t presentationNs, uint32_t transform, const std::vector<cutefish::base::Rect> &damage);
+    void frameReady(uint64_t presentationNs, uint32_t transform, const std::vector<properdesktop::base::Rect> &damage);
     void frameFailed(uint32_t reason);
     void returnCurrent();
     void destroyStream();
@@ -90,9 +90,9 @@ private:
     std::unique_ptr<CaptureSession> m_session;
     pw_stream *m_stream = nullptr;
     spa_hook *m_listener = nullptr;
-    cutefish::base::Size m_size;
+    properdesktop::base::Size m_size;
     // The negotiated format's size; buffers follow it, never a newer m_size.
-    cutefish::base::Size m_formatSize;
+    properdesktop::base::Size m_formatSize;
     uint32_t m_nodeId = 0;
     bool m_announced = false;
     bool m_streaming = false;
@@ -101,8 +101,8 @@ private:
     uint64_t m_sequence = 0;
     pw_buffer *m_current = nullptr;
     std::vector<Buffer *> m_buffers;
-    cutefish::base::ElapsedTimer m_lastCapture;
-    cutefish::base::Timer m_throttle;
+    properdesktop::base::ElapsedTimer m_lastCapture;
+    properdesktop::base::Timer m_throttle;
     // DMA-BUF negotiation: the device the compositor named, and what the
     // consumer settled on. A failed allocation withdraws the offer.
     int m_gbmFd = -1;
@@ -117,7 +117,7 @@ private:
     // What chooseModifier() settled a DONT_FIXATE choice on.
     uint32_t m_fixateFormat = 0;
     uint64_t m_fixateModifier = 0;
-    cutefish::base::Subscription m_pipewireDisconnected;
-    cutefish::base::Subscription m_waylandDisconnected;
+    properdesktop::base::Subscription m_pipewireDisconnected;
+    properdesktop::base::Subscription m_waylandDisconnected;
     std::shared_ptr<bool> m_alive = std::make_shared<bool>(true);
 };

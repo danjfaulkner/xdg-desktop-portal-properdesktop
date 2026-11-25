@@ -8,25 +8,25 @@
 class SettingsPortal
 {
 public:
-    // `servicesConfig` is cutefish-services' settings file, read once for
+    // `servicesConfig` is properdesktop-services' settings file, read once for
     // the dark mode until the live value arrives.
-    SettingsPortal(cutefish::base::dbus::Connection *bus, const std::string &servicesConfig);
+    SettingsPortal(properdesktop::base::dbus::Connection *bus, const std::string &servicesConfig);
 
     bool publish();
 
     uint32_t version() const { return 1; }
 
 private:
-    void readAll(cutefish::base::dbus::MethodCall &call) const;
-    void read(cutefish::base::dbus::MethodCall &call) const;
+    void readAll(properdesktop::base::dbus::MethodCall &call) const;
+    void read(properdesktop::base::dbus::MethodCall &call) const;
     void setDarkMode(bool darkMode);
     void refreshAppearance();
 
-    cutefish::base::dbus::Connection *m_bus;
-    cutefish::base::dbus::Object m_object;
-    cutefish::base::dbus::Proxy m_appearance;
-    cutefish::base::dbus::Match m_darkModeChanged;
-    cutefish::base::dbus::NameWatch m_appearanceOwner;
-    cutefish::base::dbus::PendingCall m_refresh;
+    properdesktop::base::dbus::Connection *m_bus;
+    properdesktop::base::dbus::Object m_object;
+    properdesktop::base::dbus::Proxy m_appearance;
+    properdesktop::base::dbus::Match m_darkModeChanged;
+    properdesktop::base::dbus::NameWatch m_appearanceOwner;
+    properdesktop::base::dbus::PendingCall m_refresh;
     uint32_t m_colorScheme = 2;
 };

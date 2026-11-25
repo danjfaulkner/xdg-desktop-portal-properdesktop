@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 // The portals on a private session bus, served from this process on its own
-// connection, with mock Cutefish services, ScreenSaver and file chooser.
+// connection, with mock Proper Desktop services, ScreenSaver and file chooser.
 
 #include "filechooserportal.h"
 #include "inhibitportal.h"
@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <vector>
 
-using namespace cutefish;
+using namespace properdesktop;
 using base::dbus::Connection;
 using base::dbus::MethodCall;
 using base::dbus::ObjectPath;
@@ -41,7 +41,7 @@ using namespace std::chrono_literals;
 
 extern char **environ;
 
-static const std::string kService = "org.freedesktop.impl.portal.desktop.cutefish";
+static const std::string kService = "org.freedesktop.impl.portal.desktop.properdesktop";
 static const std::string kPath = "/org/freedesktop/portal/desktop";
 static const std::string kSettings = "org.freedesktop.impl.portal.Settings";
 static const std::string kNamespace = "org.freedesktop.appearance";
@@ -128,12 +128,12 @@ struct Client
     }
 };
 
-// org.cutefish.Services' appearance object.
+// org.properdesktop.Services' appearance object.
 struct AppearanceService
 {
     std::unique_ptr<Connection> connection = openConnection();
-    base::dbus::Object object {connection.get(), "/org/cutefish/Services/Appearance",
-                               "org.cutefish.Services.Appearance"};
+    base::dbus::Object object {connection.get(), "/org/properdesktop/Services/Appearance",
+                               "org.properdesktop.Services.Appearance"};
     bool dark = false;
 
     AppearanceService()
@@ -146,10 +146,10 @@ struct AppearanceService
     void own(bool value)
     {
         dark = value;
-        EXPECT_TRUE(connection->requestName("org.cutefish.Services"));
+        EXPECT_TRUE(connection->requestName("org.properdesktop.Services"));
     }
 
-    void release() { connection->releaseName("org.cutefish.Services"); }
+    void release() { connection->releaseName("org.properdesktop.Services"); }
 
     void change(bool value)
     {
@@ -158,11 +158,11 @@ struct AppearanceService
     }
 };
 
-// File Manager's org.cutefish.FileChooser; Open waits without a reply.
+// File Manager's org.properdesktop.FileChooser; Open waits without a reply.
 struct ChooserService
 {
     std::unique_ptr<Connection> connection = openConnection();
-    base::dbus::Object object {connection.get(), "/org/cutefish/FileChooser", "org.cutefish.FileChooser"};
+    base::dbus::Object object {connection.get(), "/org/properdesktop/FileChooser", "org.properdesktop.FileChooser"};
     std::optional<std::string> reply;
     std::vector<std::pair<std::string, std::vector<std::string>>> calls;
     std::vector<MethodCall> pending;
@@ -187,7 +187,7 @@ struct ChooserService
             call.reply();
         });
         object.publish();
-        EXPECT_TRUE(connection->requestName("org.cutefish.FileChooser"));
+        EXPECT_TRUE(connection->requestName("org.properdesktop.FileChooser"));
     }
 
     base::json::Value request() const
@@ -248,7 +248,7 @@ protected:
     }
 
     // The portal service as main() runs it, on a connection of its own;
-    // `saved` writes cutefish-services' settings file first.
+    // `saved` writes properdesktop-services' settings file first.
     void startPortal(std::optional<bool> saved = std::nullopt)
     {
         const std::string config = directory.path() + "/services.conf";
@@ -280,7 +280,7 @@ protected:
     std::string startFrontend(const std::string &preferred)
     {
         const std::string configDirectory = directory.path() + "/xdg-desktop-portal";
-        EXPECT_TRUE(base::file::writeAtomically(configDirectory + "/cutefish-portals.conf",
+        EXPECT_TRUE(base::file::writeAtomically(configDirectory + "/properdesktop-portals.conf",
                                                 "[preferred]\ndefault=none;\n" + preferred));
         std::vector<std::string> environment;
         for (char **variable = environ; *variable; ++variable) {
@@ -290,7 +290,7 @@ protected:
                 environment.push_back(entry);
         }
         environment.push_back("XDG_CONFIG_HOME=" + directory.path());
-        environment.push_back("XDG_CURRENT_DESKTOP=Cutefish");
+        environment.push_back("XDG_CURRENT_DESKTOP=ProperDesktop");
         environment.push_back(std::string("XDG_DESKTOP_PORTAL_DIR=") + PORTAL_DATA_DIR);
         frontend = std::make_unique<base::Process>(g_loop);
         frontend->setEnvironment(environment);
@@ -340,7 +340,7 @@ protected:
                            std::string("org.example.Editor"), std::string(), std::string("Choose a file"), options);
     }
 
-    base::file::TemporaryDirectory directory {"/tmp", "cutefish-portal-test"};
+    base::file::TemporaryDirectory directory {"/tmp", "properdesktop-portal-test"};
     Client client;
     std::unique_ptr<Connection> portalBus;
     std::unique_ptr<SettingsPortal> settings;
@@ -736,7 +736,7 @@ TEST_F(InhibitTest, PublicFrontendInhibitAndClose)
 {
     if (access(kFrontend.c_str(), X_OK) != 0)
         GTEST_SKIP() << "xdg-desktop-portal frontend is not installed";
-    const std::string service = startFrontend("org.freedesktop.impl.portal.Inhibit=cutefish;\n");
+    const std::string service = startFrontend("org.freedesktop.impl.portal.Inhibit=properdesktop;\n");
     const Reply reply = client.callService(service, kPath, "org.freedesktop.portal.Inhibit", "Inhibit", std::string(),
                                            uint32_t(8),
                                            VariantMap {{"reason", Variant(std::string("Public portal test"))}});
@@ -758,8 +758,8 @@ TEST_F(PortalTest, FrontendFileChooserResponse)
     ASSERT_TRUE(base::file::writeAtomically(selected, "example"));
     startPortal();
     ChooserService chooser("{\"response\": 0, \"uris\": [\"" + base::url::fromLocalFile(selected) + "\"]}");
-    const std::string service = startFrontend("org.freedesktop.impl.portal.Settings=cutefish;\n"
-                                              "org.freedesktop.impl.portal.FileChooser=cutefish;\n");
+    const std::string service = startFrontend("org.freedesktop.impl.portal.Settings=properdesktop;\n"
+                                              "org.freedesktop.impl.portal.FileChooser=properdesktop;\n");
     std::vector<base::dbus::Message> responses;
     base::dbus::MatchRule rule;
     rule.interface = "org.freedesktop.portal.Request";
@@ -784,8 +784,8 @@ TEST_F(PortalTest, FrontendForwardsReadsAndChanges)
     AppearanceService appearance;
     appearance.own(false);
     startPortal();
-    const std::string service = startFrontend("org.freedesktop.impl.portal.Settings=cutefish;\n"
-                                              "org.freedesktop.impl.portal.FileChooser=cutefish;\n");
+    const std::string service = startFrontend("org.freedesktop.impl.portal.Settings=properdesktop;\n"
+                                              "org.freedesktop.impl.portal.FileChooser=properdesktop;\n");
     const std::string frontendInterface = "org.freedesktop.portal.Settings";
     EXPECT_EQ(read(service, frontendInterface, "ReadOne"), 2u);
     base::dbus::MatchRule rule;
@@ -951,7 +951,7 @@ TEST_F(ScreenCastTest, SelectSourcesValidation)
                                    {"cursor_mode", Variant(uint32_t(2))},
                                    {"persist_mode", Variant(uint32_t(2))},
                                    {"restore_data", Variant(std::tuple<std::string, uint32_t, Variant>(
-                                                            "Cutefish", 1, Variant(restore)))}}))
+                                                            "ProperDesktop", 1, Variant(restore)))}}))
                       .first,
               0u);
     EXPECT_TRUE(exists("ok"));

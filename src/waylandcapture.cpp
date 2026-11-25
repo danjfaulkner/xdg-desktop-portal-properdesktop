@@ -17,7 +17,7 @@
 #include <wayland-client.h>
 #include <xdg-output-unstable-v1-client-protocol.h>
 
-using namespace cutefish;
+using namespace properdesktop;
 
 struct WaylandCapture::Toplevel {
     ext_foreign_toplevel_handle_v1 *handle = nullptr;

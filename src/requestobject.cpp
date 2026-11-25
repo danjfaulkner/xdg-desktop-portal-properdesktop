@@ -6,7 +6,7 @@
 #include "base/event_loop.h"
 #include "base/strings.h"
 
-using namespace cutefish;
+using namespace properdesktop;
 
 std::unique_ptr<base::dbus::Object> exportRequest(base::dbus::Connection *bus, const std::string &path,
                                                   std::function<void(base::dbus::MethodCall &)> close)

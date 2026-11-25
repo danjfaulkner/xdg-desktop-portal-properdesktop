@@ -7,7 +7,7 @@ set -eu
 
 runner=$1
 shift
-directory=$(mktemp -d /tmp/cutefish-portal-session-XXXXXX)
+directory=$(mktemp -d /tmp/properdesktop-portal-session-XXXXXX)
 cleanup() {
     # The frontend's document helper may leave a FUSE mount after the bus exits.
     fusermount3 -u "$directory/runtime/doc" 2>/dev/null || fusermount -u "$directory/runtime/doc" 2>/dev/null || true
